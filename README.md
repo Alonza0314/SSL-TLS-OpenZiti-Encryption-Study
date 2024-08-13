@@ -77,5 +77,7 @@ Supported symmetric encryption and digital certificates.
 ## Reference
 
 [Transport Layer Security](https://en.wikipedia.org/wiki/Transport_Layer_Security)
+
 [[Secure101] 從歷史到分級， 一篇文章看懂什麼是 SSL](https://simular.co/blog/post/21-%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E7%9C%8B%E6%87%82%E4%BB%80%E9%BA%BC%E6%98%AFssl)
+
 [SSL/TLS and PKI History](https://www.feistyduck.com/ssl-tls-and-pki-history/)
