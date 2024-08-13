@@ -40,6 +40,8 @@ Introduce the historical development of SSL and TLS and their significance in ne
 + Asymmetric Encryption: Uses a pair of public and private keys for encryption and decryption (e.g., RSA).
     ![asymmetricEncryption](static/img/asymmetricEncryption.avif)
 
+---
+
 ## SSL
 
 ### SSL 1.0
