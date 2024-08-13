@@ -74,6 +74,8 @@ Supported symmetric encryption and digital certificates.
 
 ### TLS 1.3
 
+---
+
 ## Reference
 
 [Transport Layer Security](https://en.wikipedia.org/wiki/Transport_Layer_Security)
