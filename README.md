@@ -8,9 +8,9 @@
 
 [Encryption Method](#encryption-method)
 
-[SSL](#ssl)
+[SSL (Secure Sockets Layer)](#ssl-secure-sockets-layer)
 
-[TLS](#tls)
+[TLS (Transport Layer Security)](#tls-transport-layer-security)
 
 [Reference](#reference)
 
@@ -22,7 +22,7 @@ Introduce the historical development of SSL and TLS and their significance in ne
 
 ### Introduction
 
-+ SSL(Secure Sockets Layer): An early encryption protocol developed by Netscape, which has now been replaced by TLS.
++ SSL (Secure Sockets Layer): An early encryption protocol developed by Netscape, which has now been replaced by TLS.
 + TLS (Transport Layer Security): The successor to SSL, providing a more secure encryption protocol.
 
 ### Key Function
@@ -42,7 +42,7 @@ Introduce the historical development of SSL and TLS and their significance in ne
 
 ---
 
-## SSL
+## SSL (Secure Sockets Layer)
 
 ### SSL 1.0
 
@@ -64,17 +64,44 @@ Supported symmetric encryption and digital certificates.
   + Introduced a more secure handshake process.
   + Supported Message Authentication Codes (MACs), enhancing data integrity protection.
 + Vulnerabilities:
-  + Despite improvements in security, SSL 3.0 still had some issues, such as the [POODLE attack](https://www.acunetix.com/blog/web-security-zone/what-is-poodle-attack/) (Padding Oracle On Downgraded Legacy Encryption).
+  + Despite improvements in security, SSL 3.0 still had some issues, such as the [POODLE attack](https://www.acunetix.com/blog/web-security-zone/what-is-poodle-attack/).
 
-## TLS
+## TLS (Transport Layer Security)
 
 ### TLS 1.0
 
++ Improvements:
+  + Added support for HMAC (Hash-based Message Authentication Code).
++ Vulnerabilities:
+  + Still had some security issues, such as the [CRIME and BEAST attacks](https://www.infosecinstitute.com/resources/hacking/beast-vs-crime-attack/).
+
 ### TLS 1.1
+
++ Improvements:
+  + Prevented packet replay attacks by adding IV (Initialization Vector) randomization.
+  + Enhanced security for symmetric encryption modes, supporting AES encryption.
++ Vulnerabilities:
+  + Improved over TLS 1.0 but still had some known security risks, such as the [Lucky Thirteen attack](https://medium.com/@c0D3M/lucky-13-attack-explained-dd9a9fd42fa6).
 
 ### TLS 1.2
 
++ Improvements:
+  + Introduced new message authentication algorithms (e.g., SHA-256).
+  + Supported stronger encryption algorithms (e.g., AES-GCM).
+  + Improved integrity protection mechanisms.
+  + Enhanced compatibility with older versions.
++ Vulnerabilities:
+  + Although TLS 1.2 provided many security improvements, it still faced some attack threats, such as the [POODLE attack](https://www.acunetix.com/blog/web-security-zone/what-is-poodle-attack/).
+
 ### TLS 1.3
+
++ Improvements:
+  + Simplified the handshake process, reducing round trips and improving performance.
+  + Defaulted to Perfect Forward Secrecy (PFS).
+  + Removed outdated and insecure encryption algorithms and protocol features (e.g., RC4, MD5, SHA-1).
+  + Enhanced data encryption and authentication, providing stronger security assurances.
++ Vulnerabilities:
+  + TLS 1.3 was designed with a focus on security, and currently has no major security vulnerabilities, though it continues to be reviewed and improved.
 
 ---
 
@@ -85,3 +112,5 @@ Supported symmetric encryption and digital certificates.
 [Secure101](https://simular.co/blog/post/21-%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E7%9C%8B%E6%87%82%E4%BB%80%E9%BA%BC%E6%98%AFssl)
 
 [SSL/TLS and PKI History](https://www.feistyduck.com/ssl-tls-and-pki-history/)
+
+[ChatGPT](https://openai.com/chatgpt/)
