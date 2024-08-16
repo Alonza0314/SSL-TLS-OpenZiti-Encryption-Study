@@ -36,9 +36,9 @@ Introduce the historical development of SSL and TLS and their significance in ne
 ### Symmetric and Asymmetric Encryption
 
 + Symmetric Encryption: Uses the same key for both encryption and decryption (e.g., DES \ AES).
-    ![symmetricEncryption](static/img/symmetricEncyrption.avif)
+  ![symmetricEncryption](static/img/symmetricEncyrption.avif)
 + Asymmetric Encryption: Uses a pair of public and private keys for encryption and decryption (e.g., RSA).
-    ![asymmetricEncryption](static/img/asymmetricEncryption.avif)
+  ![asymmetricEncryption](static/img/asymmetricEncryption.avif)
 
 ---
 
