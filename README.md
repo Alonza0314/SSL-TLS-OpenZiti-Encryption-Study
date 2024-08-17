@@ -117,4 +117,6 @@ Supported symmetric encryption and digital certificates.
 
 [SSL/TLS and PKI History](https://www.feistyduck.com/ssl-tls-and-pki-history/)
 
+[RFC5246](https://www.rfc-editor.org/rfc/pdfrfc/rfc5246.txt.pdf)
+
 [ChatGPT](https://openai.com/chatgpt/)
