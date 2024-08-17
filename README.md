@@ -25,7 +25,7 @@ Introduce the historical development of SSL and TLS and their significance in ne
 + SSL (Secure Sockets Layer): An early encryption protocol developed by Netscape, which has now been replaced by TLS.
 + TLS (Transport Layer Security): The successor to SSL, providing a more secure encryption protocol.
 
-### Key Function
+### Core Concepts
 
 + Encryption: Ensures that data is not intercepted or altered during transmission.
 + Authentication: Ensures the trustworthiness of the communicating parties.
@@ -39,6 +39,10 @@ Introduce the historical development of SSL and TLS and their significance in ne
   ![symmetricEncryption](static/img/symmetricEncyrption.avif)
 + Asymmetric Encryption: Uses a pair of public and private keys for encryption and decryption (e.g., RSA).
   ![asymmetricEncryption](static/img/asymmetricEncryption.avif)
+
+### Key Exchange
+
++ Key Exchange Protocol: Ensure secure exchange of symmtric encryption key (e.g., Diffie-Hellman).
 
 ---
 
