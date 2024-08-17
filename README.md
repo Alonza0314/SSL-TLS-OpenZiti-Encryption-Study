@@ -72,14 +72,14 @@ Supported symmetric encryption and digital certificates.
 
 ## TLS (Transport Layer Security)
 
-### TLS 1.0
+### TLS 1.0 (RFC 2246)
 
 + Improvements:
   + Added support for HMAC (Hash-based Message Authentication Code).
 + Vulnerabilities:
   + Still had some security issues, such as the [CRIME and BEAST attacks](https://www.infosecinstitute.com/resources/hacking/beast-vs-crime-attack/).
 
-### TLS 1.1
+### TLS 1.1 (RFC 4346)
 
 + Improvements:
   + Prevented packet replay attacks by adding IV (Initialization Vector) randomization.
@@ -87,7 +87,7 @@ Supported symmetric encryption and digital certificates.
 + Vulnerabilities:
   + Improved over TLS 1.0 but still had some known security risks, such as the [Lucky Thirteen attack](https://medium.com/@c0D3M/lucky-13-attack-explained-dd9a9fd42fa6).
 
-### TLS 1.2
+### TLS 1.2 (RFC5246)
 
 + Improvements:
   + Introduced new message authentication algorithms (e.g., SHA-256).
@@ -97,7 +97,7 @@ Supported symmetric encryption and digital certificates.
 + Vulnerabilities:
   + Although TLS 1.2 provided many security improvements, it still faced some attack threats, such as the [POODLE attack](https://www.acunetix.com/blog/web-security-zone/what-is-poodle-attack/).
 
-### TLS 1.3
+### TLS 1.3 (RFC8446)
 
 + Improvements:
   + Simplified the handshake process, reducing round trips and improving performance.
