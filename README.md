@@ -96,13 +96,14 @@ Supported symmetric encryption and digital certificates.
   + Enhanced compatibility with older versions.
 + Vulnerabilities:
   + Although TLS 1.2 provided many security improvements, it still faced some attack threats, such as the [POODLE attack](https://www.acunetix.com/blog/web-security-zone/what-is-poodle-attack/).
++ Handshake Overview:
 
-```mermaid
-sequenceDiagram
-  participant Client
-  participant Server
+  ```mermaid
+  sequenceDiagram
+    participant Client
+    participant Server
 
-```
+  ```
 
 ### TLS 1.3 (RFC8446)
 
