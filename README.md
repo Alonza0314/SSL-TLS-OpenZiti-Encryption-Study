@@ -97,13 +97,19 @@ Supported symmetric encryption and digital certificates.
 + Vulnerabilities:
   + Although TLS 1.2 provided many security improvements, it still faced some attack threats, such as the [POODLE attack](https://www.acunetix.com/blog/web-security-zone/what-is-poodle-attack/).
 + Handshake Overview:
-
-  ```mermaid
-  sequenceDiagram
-    participant Client
-    participant Server
-
-  ```
+  ![TLS12](static/img/tls12.png)
+  + The ClientHello and ServerHello establish the following attributes:
+    1. Protocol Version
+    2. Session ID
+    3. Cipher Suite
+    4. Compression Method
+    5. ClientHello.random
+    6. ServerHello.random
+  + The key exchange uses up to four messages:
+    1. Server Certificate
+    2. ServerKeyExchange
+    3. Client Certificate
+    4. ClientKeyExchange
 
 ### TLS 1.3 (RFC8446)
 
