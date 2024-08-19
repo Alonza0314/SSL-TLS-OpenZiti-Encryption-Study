@@ -124,6 +124,6 @@ sequenceDiagram
 
 [SSL/TLS and PKI History](https://www.feistyduck.com/ssl-tls-and-pki-history/)
 
-[RFC5246](https://www.rfc-editor.org/rfc/pdfrfc/rfc5246.txt.pdf)
+[RFC5246](https://www.rfc-editor.org/rfc/rfc5246)
 
 [ChatGPT](https://openai.com/chatgpt/)
