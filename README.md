@@ -35,14 +35,14 @@ Introduce the historical development of SSL and TLS and their significance in ne
 
 ### Symmetric and Asymmetric Encryption
 
-+ Symmetric Encryption: Uses the same key for both encryption and decryption (e.g., DES \ AES).
++ Symmetric Encryption: Uses the same key for both encryption and decryption (e.g., [DES](https://l2x.gitbooks.io/understanding-cryptography/content/docs/chapter-1/des.html) \ [AES](https://l2x.gitbooks.io/understanding-cryptography/content/docs/chapter-1/aes.html)).
   ![symmetricEncryption](static/img/symmetricEncyrption.avif)
-+ Asymmetric Encryption: Uses a pair of public and private keys for encryption and decryption (e.g., RSA).
++ Asymmetric Encryption: Uses a pair of public and private keys for encryption and decryption (e.g., [RSA](https://l2x.gitbooks.io/understanding-cryptography/content/docs/chapter-3/rsa.html)).
   ![asymmetricEncryption](static/img/asymmetricEncryption.avif)
 
 ### Key Exchange
 
-+ Key Exchange Protocol: Ensure secure exchange of symmtric encryption key (e.g., Diffie-Hellman).
++ Key Exchange Protocol: Ensure secure exchange of symmtric encryption key (e.g., [Diffie-Hellman](https://developer.aliyun.com/article/952796)).
 
 ---
 
@@ -98,18 +98,17 @@ Supported symmetric encryption and digital certificates.
   + Although TLS 1.2 provided many security improvements, it still faced some attack threats, such as the [POODLE attack](https://www.acunetix.com/blog/web-security-zone/what-is-poodle-attack/).
 + Handshake Overview:
   ![TLS12](static/img/tls12.png)
-  + The ClientHello and ServerHello establish the following attributes:
-    1. Protocol Version
-    2. Session ID
-    3. Cipher Suite
-    4. Compression Method
-    5. ClientHello.random
-    6. ServerHello.random
-  + The key exchange uses up to four messages:
-    1. Server Certificate
-    2. ServerKeyExchange
-    3. Client Certificate
-    4. ClientKeyExchange
+  1. **ClientHello**: TLS version, cipher suite, client random number, compression method.
+  2. **ServerHello**: TLS version, cipher suite, server random number, additional information.
+  3. **ServerCertificate**: Certificate, public key(RSA).
+  4. **ServerKeyExchange**: Public key(DH), parameter(DH).
+  5. **CertificateRequest**: Optional.
+  6. **ServerHelloDone**: Ending mark.
+  7. **ClientCertificate**: Certificate(if requested by server), public key.
+  8. **ClientKeyExchange**: Pre-master secret key(RSA, encrypted by server's public key), public key(DH).
+  9. **CertificateVerify**: Verify possession of the private key in the certificate.
+  10. **ChangeCipherSpec**: Use new encryption method.
+  11. **Finished**: Ending mark.
 
 ### TLS 1.3 (RFC8446)
 
