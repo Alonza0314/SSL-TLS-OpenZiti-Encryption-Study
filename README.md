@@ -109,15 +109,6 @@ Supported symmetric encryption and digital certificates.
   9. **CertificateVerify**: Verify possession of the private key in the certificate.
   10. **ChangeCipherSpec**: Use new encryption method.
   11. **Finished**: Ending mark.
-+ RSA Senario:
-  1. Server and client specify they will use RSA and exchange the random number in the hello message.
-  2. Server send the certificate with its public key in the server certificate message.
-  3. Client send the pre-master secret key encrypted by server's public key in the client key exchange message.
-  4. Server will use its private key to decrypt the pre-master secret key.
-  5. Server and client will use pre-master secret key to compute the symmetric encryption key.
-  6. Fianlly, they will use the computed to encrypt the application data.
-+ DH Seranio:
-  1. 
 
 ### TLS 1.3 (RFC8446)
 
