@@ -119,6 +119,8 @@ Supported symmetric encryption and digital certificates.
   + Enhanced data encryption and authentication, providing stronger security assurances.
 + Vulnerabilities:
   + TLS 1.3 was designed with a focus on security, and currently has no major security vulnerabilities, though it continues to be reviewed and improved.
++ Handshake Overview:
+  ![TLS13](static/img/tls13.png)
 
 ---
 
