@@ -134,4 +134,6 @@ Supported symmetric encryption and digital certificates.
 
 [RFC5246](https://www.rfc-editor.org/rfc/rfc5246)
 
+[RFC8446](https://www.rfc-editor.org/rfc/rfc8446)
+
 [ChatGPT](https://openai.com/chatgpt/)
