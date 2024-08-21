@@ -21,3 +21,11 @@ The model seems like TLS 1.3.
 5. Finally, we will use this sender to send data and use rx to decrypt message.
 
 ## [Encrypt](encrypt.md)
+
+---
+
+## Reference
+
+[Source code: sdk-golang](https://github.com/openziti/sdk-golang)
+
+[ChatGPT](https://openai.com/chatgpt/)
