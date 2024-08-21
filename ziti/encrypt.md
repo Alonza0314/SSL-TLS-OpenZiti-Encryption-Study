@@ -1,4 +1,4 @@
-# Encryption
+# Encrypt
 
 ```go
     conn.Write([]byte(""))

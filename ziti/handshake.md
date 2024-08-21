@@ -1,4 +1,4 @@
-# **Handshake**
+# Handshake
 
 ```go
     conn, err := context.Dial(serviceName)
