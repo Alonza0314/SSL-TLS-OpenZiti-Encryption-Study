@@ -39,6 +39,10 @@
         if conn.crypto {
             pub = conn.keyPair.Public()
         }
+        connectRequest := edge.NewConnectMsg(conn.Id(), *session.Token, pub, options)
+        connectRequest.Headers[edge.ConnectionMarkerHeader] = []byte(conn.marker)
+        conn.TraceMsg("connect", connectRequest)
+        replyMsg, err := connectRequest.WithTimeout(options.ConnectTimeout).SendForReply(conn.Channel)
         // ~~~
         if conn.crypto {
             method, _ := replyMsg.GetByteHeader(edge.CryptoMethodHeader)
