@@ -1,4 +1,4 @@
-# Handshake
+# **Handshake**
 
 ## Source Code(Handshake)
 
@@ -35,7 +35,26 @@
     // sdk-golang/ziti/edge/network/conn.go
     func (conn *edgeConn) Connect(session *rest_model.SessionDetail, options *edge.DialOptions) (edge.Conn, error) {
         // ~~~
-        conn.establishClientCrypto(conn.keyPair, hostPubKey, edge.CryptoMethod(method))
+        var pub []byte
+        if conn.crypto {
+            pub = conn.keyPair.Public()
+        }
+        // ~~~
+        if conn.crypto {
+            method, _ := replyMsg.GetByteHeader(edge.CryptoMethodHeader)
+            hostPubKey := replyMsg.Headers[edge.PublicKeyHeader]
+            if hostPubKey != nil {
+                logger.Debug("setting up end-to-end encryption")
+                if err = conn.establishClientCrypto(conn.keyPair, hostPubKey, edge.CryptoMethod(method)); err != nil {
+                    logger.WithError(err).Error("crypto failure")
+                    _ = conn.Close()
+                    return nil, err
+                }
+                logger.Debug("client tx encryption setup done")
+            } else {
+                logger.Warn("connection is not end-to-end-encrypted")
+            }
+        }
         // ~~~
     }
 ```
