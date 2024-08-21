@@ -18,5 +18,6 @@ The model seems like TLS 1.3.
 2. Use local key and peer key and the "ClientSessionKeys" function to make the session key: rx(decrypt received data), tx(encrypt sent data).
 3. Create an "encryptor" as "conn.sender" which is used to encrypt and send data.
 4. Then, we need to send "txHeader" to peer side for secretstream initialization.
+5. Finally, we will use this sender to send data and use rx to decrypt message.
 
 ## [Encrypt](encrypt.md)
