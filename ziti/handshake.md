@@ -1,7 +1,5 @@
 # **Handshake**
 
-## Source Code(Handshake)
-
 ```go
     conn, err := context.Dial(serviceName)
 ```
