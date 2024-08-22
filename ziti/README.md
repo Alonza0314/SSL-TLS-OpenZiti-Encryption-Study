@@ -1,6 +1,26 @@
 # TLS in Ziti
 
-The model seems like TLS 1.3.
+The model seems like TLS 1.3 with using DH.
+
+---
+
+## Flow Chart
+
+```mermaid
+    graph TD
+    A[[Connect]]
+    B{Check crypto}
+    C[End]
+
+    subgraph D[Send client hello]
+        CA(client public key)
+        CB(Configs)
+    end
+
+    A --> B
+    B -- No --> C
+    B -- Yes --> D
+```
 
 ## [Handshake](handshake.md)
 
@@ -22,9 +42,17 @@ The model seems like TLS 1.3.
 
 ### ClientSessionKeys
 
-1. 
+1. At first, we use curve25519 to compute a share secret key.
+2. Use blake2b to initialize a hash function.
+3. Then, write the share secret key, client's and server's public key to this hash function.
+4. In the end, we can calculate the rx and tx via the hash function with three keys.
 
 ## [Encrypt](encrypt.md)
+
+### Write
+
+1. Check if connection is under crypto.
+2. If it is crypted, push data into the conn.sender(an ecryptor) and write the cipher text into message channel; otherwise, write data into the message channel directly.
 
 ---
 
