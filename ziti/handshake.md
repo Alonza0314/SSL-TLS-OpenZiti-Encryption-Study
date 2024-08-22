@@ -24,7 +24,10 @@
 ```go
     // sdk-golang/ziti/ziti.go
     func (context *ContextImpl) dialSession(service *rest_model.ServiceDetail, session *rest_model.SessionDetail, options *edge.DialOptions) (edge.Conn, error) {
-        // ~~~
+        edgeConnFactory, err := context.getEdgeRouterConn(session, options)
+        if err != nil {
+            return nil, err
+        }
         return edgeConnFactory.Connect(service, session, options)
     }
 ```

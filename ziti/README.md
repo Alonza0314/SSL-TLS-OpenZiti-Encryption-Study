@@ -1,6 +1,6 @@
 # TLS in Ziti
 
-The model seems like TLS 1.3 with using DH.
+The model seems like TLS 1.3 with using DH, but without certificate.
 
 ---
 
@@ -8,18 +8,40 @@ The model seems like TLS 1.3 with using DH.
 
 ```mermaid
     graph TD
-    A[[Connect]]
-    B{Check crypto}
-    C[End]
+        A[Connect]
+        B{Check crypto}
+        C([End])
+        D([Send client hello])
+        E([Receive server hello])
+        F[establishClientCrypto]
+        G{Check libsodium}
+        H([End])
+        I[ClientSessionKeys]
+        J((rx))
+        K((tx))
+        L([Used to decrypt data])
+        M[NewEncryptor]
+        N((txHeader))
+        O((sender, i.e., encryptor))
+        P([Send to server])
+        Q([Used to encrypt data])
 
-    subgraph D[Send client hello]
-        CA(client public key)
-        CB(Configs)
-    end
-
-    A --> B
-    B -- No --> C
-    B -- Yes --> D
+        A --> B
+        B -- No --> C
+        B -- Yes --> D
+        D --> E
+        E --> F
+        F --> G
+        G -- No --> H
+        G -- Yes --> I
+        I --> J
+        I --> K
+        J --> L
+        K --> M
+        M --> N
+        M --> O
+        N --> P
+        O --> Q
 ```
 
 ## [Handshake](handshake.md)
