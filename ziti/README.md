@@ -1,6 +1,6 @@
 # TLS in Ziti
 
-The model seems like TLS 1.3 with using DH, but without certificate, i.e., only focus on key exchange and cryption without authentication.
+The model seems like TLS 1.3 with using X25519, but without certificate, i.e., only focus on key exchange and cryption without authentication.
 
 ---
 
