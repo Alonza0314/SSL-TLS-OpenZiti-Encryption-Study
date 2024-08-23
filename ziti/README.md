@@ -2,6 +2,8 @@
 
 The model seems like TLS 1.3 with using DH, but without certificate.
 
+It seems like only focus on key exchange and cryption without authentication.
+
 ---
 
 ## Flow Chart
