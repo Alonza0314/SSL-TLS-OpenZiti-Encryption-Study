@@ -1,4 +1,4 @@
-package network
+package conn
 
 import (
 	"context"
@@ -9,14 +9,23 @@ import (
 	"os/signal"
 	"sync"
 	"syscall"
+
+	"github.com/spf13/viper"
 )
 
-type ListenerInterface func(string, int, HandlerInterface)
+type ListenerInterface func(string, HandlerInterface)
 
 type HandlerInterface func(conn net.Conn)
 
-func TCPListener(host string, port int, handler HandlerInterface) {
+func TCPListener(serverCfg string, handler HandlerInterface) {
 	log.Println("=> Server Starting...")
+	
+	viper.SetConfigFile(serverCfg)
+	if err := viper.ReadInConfig(); err != nil {
+		log.Fatalf("Failed to read config: %s\n", err.Error())
+	}
+
+	host, port := viper.GetString("server.addr"), viper.GetInt("server.port")
 
 	listener, err := net.Listen("tcp", fmt.Sprintf("%s:%v", host, port))
 	if err != nil {
@@ -53,6 +62,7 @@ func TCPListener(host string, port int, handler HandlerInterface) {
 				log.Printf("Failed to accept connection: %s\n", err.Error())
 				continue
 			}
+			log.Printf("New connection from: %s\n", conn.RemoteAddr())
 			wg.Add(1)
 			go func(conn net.Conn) {
 				defer wg.Done()

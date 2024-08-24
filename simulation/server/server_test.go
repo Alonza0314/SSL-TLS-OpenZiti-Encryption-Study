@@ -1,12 +1,12 @@
 package server
 
 import (
-	nt "server/network"
+	"simulation/conn"
 	"testing"
 )
 
 func TestServer(t *testing.T) {
-	var _ nt.ListenerInterface = nt.TCPListener
-	var _ nt.HandlerInterface = nt.TCPHandler
-	nt.TCPListener("localhost", 8080, nt.TCPHandler)
+	var _ conn.ListenerInterface = conn.TCPListener
+	var _ conn.HandlerInterface = conn.TCPHandler
+	conn.TCPListener("../config/servercfg.yaml", conn.TCPHandler)
 }
