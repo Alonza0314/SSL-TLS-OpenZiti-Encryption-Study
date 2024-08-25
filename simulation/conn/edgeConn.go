@@ -22,7 +22,7 @@ func NewEdgeConn(clinetCfg string) (*edgeConn, error) {
 	var err error
 	viper.SetConfigFile(clinetCfg)
 	if err = viper.ReadInConfig(); err != nil {
-		return nil, errors.New("failed to read config: " + err.Error())
+		return nil, errors.New("failed to read config:\n\t" + err.Error())
 	}
 
 	ec := edgeConn{}
@@ -32,14 +32,14 @@ func NewEdgeConn(clinetCfg string) (*edgeConn, error) {
 
 	ec.conn, err = net.Dial(ec.protocol, fmt.Sprintf("%s:%v", ec.addr, ec.port))
 	if err != nil {
-		return nil, errors.New("failed to dail: " + err.Error())
+		return nil, errors.New("failed to dail:\n\t" + err.Error())
 	}
 
 	ec.crypto = viper.IsSet("client.crypto")
 	if ec.crypto {
 		keyPair, err := pki.NewKeyPair(viper.GetString("client.privateKey"), viper.GetString("client.publicKey"))
 		if err != nil {
-			return nil, errors.New("failed to new keyPair: " + err.Error())
+			return nil, errors.New("failed to new keyPair:\n\t" + err.Error())
 		}
 		ec.keyPair = keyPair
 	} else {
@@ -50,6 +50,14 @@ func NewEdgeConn(clinetCfg string) (*edgeConn, error) {
 }
 
 func (c *edgeConn) Connect() error {
+	req, err := NewRequest(CLIENT_HELLO, c.keyPair.Public(), nil)
+	if err != nil {
+		return errors.New("failed to connect:\n\t" + err.Error())
+	}
+	rep, err := req.SendForReply(c.conn)
+	if err != nil {
+		return errors.New("failed to get reply:\n\t" + err.Error())
+	}
 	return nil
 }
 

@@ -22,14 +22,14 @@ func TCPListener(serverCfg string, handler HandlerInterface) {
 	
 	viper.SetConfigFile(serverCfg)
 	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Failed to read config: %s\n", err.Error())
+		log.Fatalf("failed to read config:\n\t%s\n", err.Error())
 	}
 
 	host, port := viper.GetString("server.addr"), viper.GetInt("server.port")
 
 	listener, err := net.Listen("tcp", fmt.Sprintf("%s:%v", host, port))
 	if err != nil {
-		log.Fatalf("Failed to listen on %s:%v: %s\n", host, port, err.Error())
+		log.Fatalf("failed to listen on %s:%v:\n\t%s\n", host, port, err.Error())
 	}
 	defer listener.Close()
 
@@ -59,10 +59,10 @@ func TCPListener(serverCfg string, handler HandlerInterface) {
 				if ne, ok := err.(*net.OpError); ok && ne.Err.Error() == "use of closed network connection" {
 					continue
 				}
-				log.Printf("Failed to accept connection: %s\n", err.Error())
+				log.Printf("failed to accept connection:\n\t%s\n", err.Error())
 				continue
 			}
-			log.Printf("New connection from: %s\n", conn.RemoteAddr())
+			log.Printf("new connection from: %s\n", conn.RemoteAddr())
 			wg.Add(1)
 			go func(conn net.Conn) {
 				defer wg.Done()
