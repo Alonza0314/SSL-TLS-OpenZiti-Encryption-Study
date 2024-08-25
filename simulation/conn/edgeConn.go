@@ -16,6 +16,10 @@ type edgeConn struct {
 	conn     net.Conn
 	crypto   bool
 	keyPair  *pki.KeyPair
+	rx       any
+	tx       any
+	sender   any
+	receiver any
 }
 
 func NewEdgeConn(clinetCfg string) (*edgeConn, error) {
@@ -45,7 +49,7 @@ func NewEdgeConn(clinetCfg string) (*edgeConn, error) {
 	} else {
 		ec.keyPair = nil
 	}
-	
+
 	return &ec, nil
 }
 
@@ -58,6 +62,8 @@ func (c *edgeConn) Connect() error {
 	if err != nil {
 		return errors.New("failed to get reply:\n\t" + err.Error())
 	}
+	// TODO: compute with reply
+	fmt.Println(rep)
 	return nil
 }
 

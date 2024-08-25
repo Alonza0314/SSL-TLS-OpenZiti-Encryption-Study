@@ -2,6 +2,7 @@ package conn
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net"
@@ -9,6 +10,7 @@ import (
 	"os/signal"
 	"sync"
 	"syscall"
+	"time"
 
 	"github.com/spf13/viper"
 )
@@ -19,7 +21,7 @@ type HandlerInterface func(conn net.Conn)
 
 func TCPListener(serverCfg string, handler HandlerInterface) {
 	log.Println("=> Server Starting...")
-	
+
 	viper.SetConfigFile(serverCfg)
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("failed to read config:\n\t%s\n", err.Error())
@@ -62,7 +64,7 @@ func TCPListener(serverCfg string, handler HandlerInterface) {
 				log.Printf("failed to accept connection:\n\t%s\n", err.Error())
 				continue
 			}
-			log.Printf("new connection from: %s\n", conn.RemoteAddr())
+			log.Println(NEW, "CONNECTION from", conn.RemoteAddr())
 			wg.Add(1)
 			go func(conn net.Conn) {
 				defer wg.Done()
@@ -74,4 +76,18 @@ func TCPListener(serverCfg string, handler HandlerInterface) {
 }
 
 func TCPHandler(conn net.Conn) {
+	if err := conn.SetReadDeadline(time.Now().Add(CONN_TIMEOUT)); err != nil {
+		log.Printf("failed to set read timeoute:\n\t%s\n", err.Error())
+		return
+	}
+	var req request
+	if err := json.NewDecoder(conn).Decode(&req); err != nil {
+		log.Printf("failed to decode request:\n\t%s\n", err.Error())
+		return
+	}
+	log.Println(RECEIVED, CLIENT_HELLO, "from", conn.RemoteAddr())
+	if err := conn.SetReadDeadline(time.Time{}); err != nil {
+		log.Printf("failed to reset read timeout:\n\t%s\n", err.Error())
+		return
+	}
 }
