@@ -9,7 +9,7 @@ const (
 	BUFFERSIZE    = 1024
 	CONN_TIMEOUT  = 5 * time.Second
 
-	NEW = "[NEW]"
+	NEW      = "[NEW]"
 	RECEIVED = "[RECEIVED]"
 	SENT     = "[SENT]"
 )
