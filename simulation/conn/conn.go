@@ -8,6 +8,8 @@ import (
 	"net"
 	"os"
 	"os/signal"
+	"simulation/config"
+	"simulation/pki"
 	"sync"
 	"syscall"
 	"time"
@@ -64,7 +66,7 @@ func TCPListener(serverCfg string, handler HandlerInterface) {
 				log.Printf("failed to accept connection:\n\t%s\n", err.Error())
 				continue
 			}
-			log.Println(NEW, "CONNECTION from", conn.RemoteAddr())
+			log.Println(config.NEW, "CONNECTION from", conn.RemoteAddr())
 			wg.Add(1)
 			go func(conn net.Conn) {
 				defer wg.Done()
@@ -76,7 +78,7 @@ func TCPListener(serverCfg string, handler HandlerInterface) {
 }
 
 func TCPHandler(conn net.Conn) {
-	if err := conn.SetReadDeadline(time.Now().Add(CONN_TIMEOUT)); err != nil {
+	if err := conn.SetReadDeadline(time.Now().Add(config.CONN_TIMEOUT)); err != nil {
 		log.Printf("failed to set read timeoute:\n\t%s\n", err.Error())
 		return
 	}
@@ -85,9 +87,28 @@ func TCPHandler(conn net.Conn) {
 		log.Printf("failed to decode request:\n\t%s\n", err.Error())
 		return
 	}
-	log.Println(RECEIVED, CLIENT_HELLO, "from", conn.RemoteAddr())
+	log.Println(config.RECEIVED, config.CLIENT_HELLO, "from", conn.RemoteAddr())
 	if err := conn.SetReadDeadline(time.Time{}); err != nil {
 		log.Printf("failed to reset read timeout:\n\t%s\n", err.Error())
 		return
 	}
+
+	viper.SetConfigFile("../config/servercfg.yaml")
+	if err := viper.ReadInConfig(); err != nil {
+		log.Printf("failed to read config:\n\t%s\n", err.Error())
+		return
+	}
+	keyPair, err := pki.NewKeyPair(viper.GetString("server.privateKey"), viper.GetString("server.publicKey"))
+	if err != nil {
+		log.Printf("failed to new keypair:\n\t%s\n", err.Error())
+	}
+
+	rx, tx, err := keyPair.SessionKeys(req.PublicKey)
+	if err != nil {
+		log.Printf("failed to compute rx tx:\n\t%s\n", err.Error())
+		return
+	}
+
+	fmt.Println(rx)
+	fmt.Println(tx)
 }

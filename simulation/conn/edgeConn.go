@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"simulation/config"
 	"simulation/pki"
 
 	"github.com/spf13/viper"
@@ -54,7 +55,7 @@ func NewEdgeConn(clinetCfg string) (*edgeConn, error) {
 }
 
 func (c *edgeConn) Connect() error {
-	req, err := NewRequest(CLIENT_HELLO, c.keyPair.Public(), nil)
+	req, err := NewRequest(config.CLIENT_HELLO, c.keyPair.Public(), nil)
 	if err != nil {
 		return errors.New("failed to connect:\n\t" + err.Error())
 	}

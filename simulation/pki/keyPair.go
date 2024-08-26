@@ -7,6 +7,10 @@ import (
 	"encoding/pem"
 	"errors"
 	"os"
+	"simulation/config"
+
+	"golang.org/x/crypto/blake2b"
+	"golang.org/x/crypto/curve25519"
 )
 
 type KeyPair struct {
@@ -64,5 +68,24 @@ func (k *KeyPair) Public() ed25519.PublicKey {
 }
 
 func (k *KeyPair) SessionKeys(peerKey ed25519.PublicKey) ([]byte, []byte, error) {
-	return []byte{}, []byte{}, nil
+	// This function is adapted from secretstream/stream.go.
+	q, err := curve25519.X25519(k.Private(), peerKey)
+	if err != nil {
+		return nil, nil, errors.New("failed to compute share point in x25519:\n\t" + err.Error())
+	}
+
+	h, err := blake2b.New(2 * config.SESSIONKEYSIZE, nil)
+	if err != nil {
+		return nil, nil, errors.New("failed to new blake2b:\n\t" + err.Error())
+	}
+
+	for _, b := range [][]byte{q, k.Public(), peerKey} {
+		if _, err := h.Write(b); err != nil {
+			return nil, nil, errors.New("failed to write to hash:\n\t" + err.Error())
+		}
+	}
+
+	keys := h.Sum(nil)
+
+	return keys[: config.SESSIONKEYSIZE], keys[config.SESSIONKEYSIZE:], nil
 }

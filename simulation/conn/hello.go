@@ -6,6 +6,7 @@ import (
 	"errors"
 	"log"
 	"net"
+	"simulation/config"
 	"time"
 )
 
@@ -16,10 +17,10 @@ type request struct {
 }
 
 func NewRequest(hello string, publicKey ed25519.PublicKey, options map[string]string) (*request, error) {
-	if hello != CLIENT_HELLO {
+	if hello != config.CLIENT_HELLO {
 		return nil, errors.New("failed to new request:\n\thello message expected to be CLIENT_HELLO")
 	}
-	if len(publicKey) != X25519KEYSIZE {
+	if len(publicKey) != config.X25519KEYSIZE {
 		return nil, errors.New("failed to new request:\n\tpublicKey is not a valid X25519 public key")
 	}
 	return &request{
@@ -35,25 +36,25 @@ func (r *request) SendForReply(conn net.Conn) (*reply, error) {
 		return nil, errors.New("failed to marshell request:\n\t" + err.Error())
 	}
 
-	if err = conn.SetWriteDeadline(time.Now().Add(CONN_TIMEOUT)); err != nil {
+	if err = conn.SetWriteDeadline(time.Now().Add(config.CONN_TIMEOUT)); err != nil {
 		return nil, errors.New("failed to set conn write timeout:\n\t" + err.Error())
 	}
 	if _, err = conn.Write(jreq); err != nil {
 		return nil, errors.New("failed to write to conn:\n\t" + err.Error())
 	}
-	log.Println(SENT, CLIENT_HELLO)
+	log.Println(config.SENT, config.CLIENT_HELLO)
     if err = conn.SetWriteDeadline(time.Time{}); err != nil {
         return nil, errors.New("failed to reset write timeout:\n\t" + err.Error())
     }
 
-	if err = conn.SetReadDeadline(time.Now().Add(CONN_TIMEOUT)); err != nil {
+	if err = conn.SetReadDeadline(time.Now().Add(config.CONN_TIMEOUT)); err != nil {
 		return nil, errors.New("failed to set conn read timeout:\n\t" + err.Error())
 	}
 	var rep reply
 	if err = json.NewDecoder(conn).Decode(&rep); err != nil {
 		return nil, errors.New("failed to decode from conn:\n\t" + err.Error())
 	}
-	log.Println(RECEIVED, SERVER_HELLO)
+	log.Println(config.RECEIVED, config.SERVER_HELLO)
     if err = conn.SetReadDeadline(time.Time{}); err != nil {
         return nil, errors.New("failed to reset read timeout:\n\t" + err.Error())
     }
@@ -68,10 +69,10 @@ type reply struct {
 }
 
 func NewReply(hello string, publicKey ed25519.PublicKey, options map[string]string) (*reply, error) {
-	if hello != SERVER_HELLO {
+	if hello != config.SERVER_HELLO {
 		return nil, errors.New("failed to new request:\n\thello message expected to be SERVER_HELLO")
 	}
-	if len(publicKey) != X25519KEYSIZE {
+	if len(publicKey) != config.X25519KEYSIZE {
 		return nil, errors.New("failed to new request:\n\tpublicKey is not a valid X25519 public key")
 	}
 	return &reply{
