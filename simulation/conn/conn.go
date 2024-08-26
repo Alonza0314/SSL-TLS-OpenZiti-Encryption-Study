@@ -109,6 +109,11 @@ func TCPHandler(conn net.Conn) {
 		return
 	}
 
-	fmt.Println(rx)
-	fmt.Println(tx)
+	sender, txHeader, err := pki.NewEncryptor(tx)
+	if err != nil {
+		log.Printf("failed to new encryptor:\n\t%s\n", err.Error())
+		return
+	}
+
+	// TODO
 }

@@ -74,7 +74,7 @@ func (k *KeyPair) SessionKeys(peerKey ed25519.PublicKey) ([]byte, []byte, error)
 		return nil, nil, errors.New("failed to compute share point in x25519:\n\t" + err.Error())
 	}
 
-	h, err := blake2b.New(2 * config.SESSIONKEYSIZE, nil)
+	h, err := blake2b.New(2 * config.SESSION_KEY_SIZE, nil)
 	if err != nil {
 		return nil, nil, errors.New("failed to new blake2b:\n\t" + err.Error())
 	}
@@ -87,5 +87,5 @@ func (k *KeyPair) SessionKeys(peerKey ed25519.PublicKey) ([]byte, []byte, error)
 
 	keys := h.Sum(nil)
 
-	return keys[: config.SESSIONKEYSIZE], keys[config.SESSIONKEYSIZE:], nil
+	return keys[: config.SESSION_KEY_SIZE], keys[config.SESSION_KEY_SIZE:], nil
 }

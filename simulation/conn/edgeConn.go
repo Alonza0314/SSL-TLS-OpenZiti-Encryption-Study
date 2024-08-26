@@ -17,10 +17,10 @@ type edgeConn struct {
 	conn     net.Conn
 	crypto   bool
 	keyPair  *pki.KeyPair
-	rx       any
-	tx       any
-	sender   any
-	receiver any
+	rx       []byte
+	tx       []byte
+	sender   pki.Encryptor
+	receiver pki.Decryptor
 }
 
 func NewEdgeConn(clinetCfg string) (*edgeConn, error) {

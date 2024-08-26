@@ -20,7 +20,7 @@ func NewRequest(hello string, publicKey ed25519.PublicKey, options map[string]st
 	if hello != config.CLIENT_HELLO {
 		return nil, errors.New("failed to new request:\n\thello message expected to be CLIENT_HELLO")
 	}
-	if len(publicKey) != config.X25519KEYSIZE {
+	if len(publicKey) != config.X25519_KEY_SIZE {
 		return nil, errors.New("failed to new request:\n\tpublicKey is not a valid X25519 public key")
 	}
 	return &request{
@@ -72,7 +72,7 @@ func NewReply(hello string, publicKey ed25519.PublicKey, options map[string]stri
 	if hello != config.SERVER_HELLO {
 		return nil, errors.New("failed to new request:\n\thello message expected to be SERVER_HELLO")
 	}
-	if len(publicKey) != config.X25519KEYSIZE {
+	if len(publicKey) != config.X25519_KEY_SIZE {
 		return nil, errors.New("failed to new request:\n\tpublicKey is not a valid X25519 public key")
 	}
 	return &reply{
