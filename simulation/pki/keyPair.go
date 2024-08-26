@@ -68,7 +68,7 @@ func (k *KeyPair) Public() ed25519.PublicKey {
 }
 
 func (k *KeyPair) SessionKeys(peerKey ed25519.PublicKey) ([]byte, []byte, error) {
-	// This function is adapted from secretstream/stream.go.
+	// This function is adapted from secretstream/kx/kx.go.
 	q, err := curve25519.X25519(k.Private(), peerKey)
 	if err != nil {
 		return nil, nil, errors.New("failed to compute share point in x25519:\n\t" + err.Error())

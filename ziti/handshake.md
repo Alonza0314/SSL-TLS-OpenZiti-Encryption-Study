@@ -98,7 +98,7 @@
 ```
 
 ```go
-    // secretstream/stream.go
+    // secretstream/kx/kx.go
     func (pair *KeyPair) ClientSessionKeys(server_pk []byte) (rx []byte, tx []byte, err error) {
         q, err := curve25519.X25519(pair.sk[:], server_pk)
         if err != nil {

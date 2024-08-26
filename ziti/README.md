@@ -19,12 +19,13 @@ The model seems like TLS 1.3 with using [X25519](https://blog.sww.moe/post/x2551
         I[ClientSessionKeys]
         J((rx))
         K((tx))
-        L([Used to decrypt data])
+        L[NewDeCryptor]
         M[NewEncryptor]
         N((txHeader))
         O((sender, i.e., encryptor))
-        P([Send to server])
-        Q([Used to encrypt data])
+        P([Used to encrypt data])
+        Q((receiver, i.e, decryptor))
+        R([Used to decrypt data])
 
         A --> B
         B -- No --> C
@@ -37,11 +38,14 @@ The model seems like TLS 1.3 with using [X25519](https://blog.sww.moe/post/x2551
         I --> J
         I --> K
         J --> L
+        K --> N
         K --> M
-        M --> N
+        N --> L
+        N --> M
         M --> O
-        N --> P
-        O --> Q
+        O --> P
+        L --> Q
+        Q --> R
 ```
 
 ## [Handshake](handshake.md)
@@ -64,7 +68,7 @@ The model seems like TLS 1.3 with using [X25519](https://blog.sww.moe/post/x2551
 
 ### ClientSessionKeys
 
-1. At first, we use curve25519 to compute a share secret key.
+1. At first, we use curve25519 to compute a "share secret point".
 2. Use blake2b to initialize a hash function.
 3. Then, write the share secret key, client's and server's public key to this hash function.
 4. In the end, we can calculate the rx and tx via the hash function with three keys.
