@@ -28,11 +28,8 @@ type encryptor struct {
 	streamState
 }
 
-type decryptor struct {
-	streamState
-}
-
 type Encryptor interface {
+	Push()
 }
 
 func NewEncryptor(key, header []byte) (Encryptor, error) {
@@ -60,7 +57,16 @@ func NewEncryptor(key, header []byte) (Encryptor, error) {
 	return stream, nil
 }
 
+func (e *encryptor) Push() {
+
+}
+
+type decryptor struct {
+	streamState
+}
+
 type Decryptor interface {
+	Pull()
 }
 
 func NewDecryptor(key, header []byte) (Decryptor, error) {
@@ -78,4 +84,8 @@ func NewDecryptor(key, header []byte) (Decryptor, error) {
 	copy(stream.pad[:], pad0[:])
 
 	return stream, nil
+}
+
+func (d *decryptor) Pull() {
+	
 }
