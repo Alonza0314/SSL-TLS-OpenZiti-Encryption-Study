@@ -24,12 +24,12 @@ func (s *streamState) reset() {
 	s.nonce[0] = 1
 }
 
-type encryptor struct {
-	streamState
-}
-
 type Encryptor interface {
 	Push()
+}
+
+type Decryptor interface {
+	Pull()
 }
 
 func NewEncryptor(key, header []byte) (Encryptor, error) {
@@ -57,18 +57,6 @@ func NewEncryptor(key, header []byte) (Encryptor, error) {
 	return stream, nil
 }
 
-func (e *encryptor) Push() {
-
-}
-
-type decryptor struct {
-	streamState
-}
-
-type Decryptor interface {
-	Pull()
-}
-
 func NewDecryptor(key, header []byte) (Decryptor, error) {
 	stream := &decryptor{}
 	k, err := chacha20.HChaCha20(key, header[:config.CRYPTO_CORE_HCHACHA20_INPUTSIZE])
@@ -86,6 +74,18 @@ func NewDecryptor(key, header []byte) (Decryptor, error) {
 	return stream, nil
 }
 
+type encryptor struct {
+	streamState
+}
+
+func (e *encryptor) Push() {
+
+}
+
+type decryptor struct {
+	streamState
+}
+
 func (d *decryptor) Pull() {
-	
+
 }

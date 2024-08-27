@@ -38,10 +38,9 @@ The model seems like TLS 1.3 with using [X25519](https://blog.sww.moe/post/x2551
         I --> J
         I --> K
         J --> L
-        K --> N
+        M --> N
         K --> M
         N --> L
-        N --> M
         M --> O
         O --> P
         L --> Q

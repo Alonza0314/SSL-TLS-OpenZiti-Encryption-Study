@@ -44,11 +44,15 @@ func NewEdgeConn(clinetCfg string) (*edgeConn, error) {
 
 	ec.crypto = viper.IsSet("client.crypto")
 	if ec.crypto {
-		keyPair, err := pki.NewKeyPair(viper.GetString("client.privateKey"), viper.GetString("client.publicKey"))
-		if err != nil {
+		// keyPair, err := pki.NewKeyPair(viper.GetString("client.privateKey"), viper.GetString("client.publicKey"))
+		// if err != nil {
+		// 	return nil, errors.New("failed to new keyPair:\n\t" + err.Error())
+		// }
+		// ec.keyPair = keyPair
+
+		if ec.keyPair, err = pki.NewKeyPair(); err != nil {
 			return nil, errors.New("failed to new keyPair:\n\t" + err.Error())
 		}
-		ec.keyPair = keyPair
 	} else {
 		ec.keyPair = nil
 	}
@@ -74,7 +78,7 @@ func (c *edgeConn) Connect() error {
 		return errors.New("failed to get reply:\n\t" + err.Error())
 	}
 	
-	if c.rx, c.tx, err = c.keyPair.SessionKeys(rep.PublicKey); err != nil {
+	if c.rx, c.tx, err = c.keyPair.ClientSessionKeys(rep.PublicKey); err != nil {
 		return errors.New("failed to compute rx tx :\n\t" + err.Error())
 	}
 
