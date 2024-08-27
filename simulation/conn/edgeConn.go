@@ -1,6 +1,7 @@
 package conn
 
 import (
+	"crypto/rand"
 	"errors"
 	"fmt"
 	"net"
@@ -19,6 +20,7 @@ type edgeConn struct {
 	keyPair  *pki.KeyPair
 	rx       []byte
 	tx       []byte
+	txHeader []byte
 	sender   pki.Encryptor
 	receiver pki.Decryptor
 }
@@ -51,11 +53,19 @@ func NewEdgeConn(clinetCfg string) (*edgeConn, error) {
 		ec.keyPair = nil
 	}
 
+	ec.txHeader = make([]byte, config.STREAM_HEADER_SIZE)
+	if _, err := rand.Read(ec.txHeader); err != nil {
+		return nil, errors.New("failed to make txHeader:\n\t" + err.Error())
+	}
+
 	return &ec, nil
 }
 
 func (c *edgeConn) Connect() error {
-	req, err := NewRequest(config.CLIENT_HELLO, c.keyPair.Public(), nil)
+	options := map[string]string{
+		config.TX_HEADER: string(c.txHeader),
+	}
+	req, err := NewRequest(config.CLIENT_HELLO, c.keyPair.Public(), options)
 	if err != nil {
 		return errors.New("failed to connect:\n\t" + err.Error())
 	}
@@ -63,11 +73,30 @@ func (c *edgeConn) Connect() error {
 	if err != nil {
 		return errors.New("failed to get reply:\n\t" + err.Error())
 	}
-	// TODO: compute with reply
-	fmt.Println(rep)
+	
+	if c.rx, c.tx, err = c.keyPair.SessionKeys(rep.PublicKey); err != nil {
+		return errors.New("failed to compute rx tx :\n\t" + err.Error())
+	}
+
+	if c.sender, err = pki.NewEncryptor(c.tx, c.txHeader); err != nil {
+		return errors.New("failed to new encryptor\n\t%s\n" + err.Error())
+	}
+
+	if c.receiver, err = pki.NewDecryptor(c.rx, []byte(rep.Options[config.TX_HEADER])); err != nil {
+		return errors.New("failed to new decryptor\n\t%s\n" + err.Error())
+	}
+	// TODO
 	return nil
+}
+
+func (c *edgeConn) Read(msg *[]byte) (int, error) {
+	return 0, nil
 }
 
 func (c *edgeConn) Write(msg []byte) (int, error) {
 	return 0, nil
+}
+
+func (c *edgeConn) Close() error {
+	return c.conn.Close()
 }

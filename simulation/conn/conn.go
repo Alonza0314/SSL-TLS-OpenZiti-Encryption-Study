@@ -2,6 +2,7 @@ package conn
 
 import (
 	"context"
+	"crypto/rand"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -109,11 +110,37 @@ func TCPHandler(conn net.Conn) {
 		return
 	}
 
-	sender, txHeader, err := pki.NewEncryptor(tx)
+	txHeader := make([]byte, config.STREAM_HEADER_SIZE)
+	if _, err := rand.Read(txHeader); err != nil {
+		log.Printf("failed to make txHeader:\n\t%s\n", err.Error())
+		return
+	}
+
+	sender, err := pki.NewEncryptor(tx, txHeader)
 	if err != nil {
 		log.Printf("failed to new encryptor:\n\t%s\n", err.Error())
 		return
 	}
 
+	receiver, err := pki.NewDecryptor(rx, []byte(req.Options[config.TX_HEADER]))
+	if err != nil {
+		log.Printf("failed to new decryptor:\n\t%s\n", err.Error())
+		return
+	}
+	options := map[string]string{
+		config.TX_HEADER: string(txHeader),
+	}
+	rep, err := NewReply(config.SERVER_HELLO, keyPair.Public(), options)
+	if err != nil {
+		log.Printf("failed to new reply:\n\t%s\n", err.Error())
+		return
+	}
+
+	if err = rep.SendReply(conn); err != nil {
+		log.Printf("failed to send reply:\n\t%s\n", err.Error())
+		return
+	}
+
 	// TODO
+	fmt.Println(sender, receiver)
 }

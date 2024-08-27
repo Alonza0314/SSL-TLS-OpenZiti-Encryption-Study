@@ -14,8 +14,11 @@ func TestClient(t *testing.T) {
 	}
 	assert.NotNil(t, conn, "expected non-nil edgeConn instance")
 	
-	err = conn.Connect()
-	if err != nil {
+	if err = conn.Connect(); err != nil {
+		t.Fatal(err)
+	}
+
+	if err = conn.Close(); err != nil {
 		t.Fatal(err)
 	}
 }

@@ -81,3 +81,22 @@ func NewReply(hello string, publicKey ed25519.PublicKey, options map[string]stri
 		Options:   options,
 	}, nil
 }
+
+func (r *reply) SendReply(conn net.Conn) error {
+	jrep, err := json.Marshal(r)
+	if err != nil {
+		return errors.New("failed to marshell reply:\n\t" + err.Error())
+	}
+	if err = conn.SetWriteDeadline(time.Now().Add(config.CONN_TIMEOUT)); err != nil {
+		return errors.New("failed to set conn write timeout:\n\t" + err.Error())
+	}
+	if _, err = conn.Write(jrep); err != nil {
+		return errors.New("failed to write to conn:\n\t" + err.Error())
+	}
+	log.Println(config.SENT, config.SERVER_HELLO)
+	if err = conn.SetWriteDeadline(time.Time{}); err != nil {
+        return errors.New("failed to reset write timeout:\n\t" + err.Error())
+    }
+
+	return nil
+}
