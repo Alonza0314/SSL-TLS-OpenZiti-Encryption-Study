@@ -20,7 +20,7 @@ import (
 
 type ListenerInterface func(string, HandlerInterface)
 
-type HandlerInterface func(conn net.Conn)
+type HandlerInterface func(conn net.Conn, ctx context.Context)
 
 func TCPListener(serverCfg string, handler HandlerInterface) {
 	log.Println("=> Server Starting...")
@@ -72,13 +72,13 @@ func TCPListener(serverCfg string, handler HandlerInterface) {
 			go func(conn net.Conn) {
 				defer wg.Done()
 				defer conn.Close()
-				handler(conn)
+				handler(conn, ctx)
 			}(conn)
 		}
 	}
 }
 
-func TCPHandler(conn net.Conn) {
+func TCPHandler(conn net.Conn, ctx context.Context) {
 	if err := conn.SetReadDeadline(time.Now().Add(config.CONN_TIMEOUT)); err != nil {
 		log.Printf("failed to set read timeoute:\n\t%s\n", err.Error())
 		return
@@ -155,5 +155,15 @@ func TCPHandler(conn net.Conn) {
 	}
 
 	// TODO
+	// ctx graceful stop
+	for {
+		select {
+		case <-ctx.Done():
+		default:
+			// TODO
+			// Read and Write
+			// if Read EOF, break for and return
+		}
+	}
 	fmt.Println(sender, receiver)
 }

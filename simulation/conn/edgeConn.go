@@ -89,15 +89,20 @@ func (c *edgeConn) Connect() error {
 	if c.receiver, err = pki.NewDecryptor(c.rx, []byte(rep.Options[config.TX_HEADER])); err != nil {
 		return errors.New("failed to new decryptor\n\t%s\n" + err.Error())
 	}
-	// TODO
 	return nil
 }
 
-func (c *edgeConn) Read(msg *[]byte) (int, error) {
+func (c *edgeConn) Communicate() error {
+	// TODO
+	// use graceful stop
+	return nil
+}
+
+func (c *edgeConn) read(msg *[]byte) (int, error) {
 	return 0, nil
 }
 
-func (c *edgeConn) Write(msg []byte) (int, error) {
+func (c *edgeConn) write(msg []byte) (int, error) {
 	return 0, nil
 }
 
