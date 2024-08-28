@@ -22,8 +22,6 @@ In advance, I will give a basic introduction on the historical development of SS
 
 Then, I will demonstrate a simple ziti's data encryption and decryption simulation.
 
----
-
 ## Basic Concept
 
 ### Introduction
