@@ -1,6 +1,8 @@
-# TLS in Ziti
+# Ziti's Data Encryption and Decryption
 
 The model seems like TLS 1.3 with using [X25519](https://blog.sww.moe/post/x25519/), but without certificate, i.e., only focus on key exchange and cryption without authentication.
+
+This model is only from client aspect.
 
 ---
 
@@ -23,9 +25,9 @@ The model seems like TLS 1.3 with using [X25519](https://blog.sww.moe/post/x2551
         M[NewEncryptor]
         N((txHeader))
         O((sender, i.e., encryptor))
-        P([Used to encrypt data])
+        P([Push: used to encrypt data])
         Q((receiver, i.e, decryptor))
-        R([Used to decrypt data])
+        R([Pull: used to decrypt data])
 
         A --> B
         B -- No --> C
@@ -51,19 +53,18 @@ The model seems like TLS 1.3 with using [X25519](https://blog.sww.moe/post/x2551
 
 ### Connect
 
-1. In connect function, we first check if it needs "crypto" and extract its(local) public key.
+1. In connect function, we first check if it needs "crypto" and extract its public key.
 2. And, we send the first "hello" message including public key and some configs to peer endpoint.
-3. Then we get the crypto method from the reply message, including TLS version and encrypt alogorithm.
-4. Also, we get the peer side public key from reply message.
-5. Then, it's time to estblish client crypto, i.e., call the "[establishClientCrypto](#establishclientcrypto)" function.
+3. Then, we get the peer side public key from reply message.
+4. Finally, it's time to estblish client crypto, i.e., call the "[establishClientCrypto](#establishclientcrypto)" function.
 
 ### establishClientCrypto
 
 1. Check if it is based on "libsodium"; otherwise, break it.
-2. Use local key and peer key and the "[ClientSessionKeys](#clientsessionkeys)" function to make the session key: rx(decrypt received data), tx(encrypt sent data).
+2. Use session key and peer key and call the "[ClientSessionKeys](#clientsessionkeys)" function to make the session key: rx(decrypt received data), tx(encrypt sent data).
 3. Create an "encryptor" as "conn.sender" which is used to encrypt and send data.
 4. Then, we need to send "txHeader" to peer side for secretstream initialization.
-5. Finally, we will use this sender to send data and use rx to decrypt message.
+5. Finally, we will use this sender to send data and use rx to make a decryptor which is used to decrypt message.
 
 ### ClientSessionKeys
 
@@ -76,8 +77,27 @@ The model seems like TLS 1.3 with using [X25519](https://blog.sww.moe/post/x2551
 
 ### Write
 
-1. Check if connection is under crypto.
-2. If it is crypted, push data into the conn.sender(an ecryptor) and write the cipher text into message channel; otherwise, write data into the message channel directly.
+1. Push data into the conn.sender(an ecryptor) and write the ciphertext into message channel.
+
+### Read
+
+1. Pull data from the conn.receiver(a decryptor) and get the plaintext.
+
+## [keypair](keypair.md)
+
+The main idea is computing rx and tx session keys under curve25519.
+
+### KeyPair
+
+1. The KeyPair struct is consist a "publicKey" and a "sessionKey".
+
+### NewKeyPair
+
+1. Used to make a new KeyPair.
+
+### (Client/Server)SessionKeys
+
+1. It will return rx and tx which will used in making decryptor and encryptor.
 
 ---
 
