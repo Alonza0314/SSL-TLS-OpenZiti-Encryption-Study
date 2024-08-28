@@ -12,11 +12,17 @@
 
 [TLS (Transport Layer Security)](#tls-transport-layer-security)
 
+[Ziti's Data Encryption and Decryption](#zitis-data-encryption-and-decryption)
+
 [Reference](#reference)
 
 ## Abstract
 
-Introduce the historical development of SSL and TLS and their significance in network security.
+In advance, I will give a basic introduction on the historical development of SSL and TLS and their significance in network security.
+
+Then, I will demonstrate a simple ziti's data encryption and decryption simulation.
+
+---
 
 ## Basic Concept
 
@@ -36,9 +42,9 @@ Introduce the historical development of SSL and TLS and their significance in ne
 ### Symmetric and Asymmetric Encryption
 
 + Symmetric Encryption: Uses the same key for both encryption and decryption (e.g., [DES](https://l2x.gitbooks.io/understanding-cryptography/content/docs/chapter-1/des.html) \ [AES](https://l2x.gitbooks.io/understanding-cryptography/content/docs/chapter-1/aes.html)).
-  ![symmetricEncryption](static/img/symmetricEncyrption.avif)
+  ![symmetricEncryption](static/zitiImg/symmetricEncyrption.avif)
 + Asymmetric Encryption: Uses a pair of public and private keys for encryption and decryption (e.g., [RSA](https://l2x.gitbooks.io/understanding-cryptography/content/docs/chapter-3/rsa.html)).
-  ![asymmetricEncryption](static/img/asymmetricEncryption.avif)
+  ![asymmetricEncryption](static/zitiImg/asymmetricEncryption.avif)
 
 ### Key Exchange
 
@@ -97,7 +103,7 @@ Supported symmetric encryption and digital certificates.
 + Vulnerabilities:
   + Although TLS 1.2 provided many security improvements, it still faced some attack threats, such as the [POODLE attack](https://www.acunetix.com/blog/web-security-zone/what-is-poodle-attack/).
 + Handshake Overview:
-  ![TLS12](static/img/tls12.png)
+  ![TLS12](static/zitiImg/tls12.png)
   1. **ClientHello**: TLS version, cipher suite, client random number, compression method.
   2. **ServerHello**: TLS version, cipher suite, server random number, additional information.
   3. **ServerCertificate**: Certificate, public key(RSA).
@@ -120,7 +126,15 @@ Supported symmetric encryption and digital certificates.
 + Vulnerabilities:
   + TLS 1.3 was designed with a focus on security, and currently has no major security vulnerabilities, though it continues to be reviewed and improved.
 + Handshake Overview:
-  ![TLS13](static/img/tls13.png)
+  ![TLS13](static/zitiImg/tls13.png)
+
+---
+
+## Ziti's Data Encryption and Decryption
+
+Click here: [Model Description](ziti/README.md)
+
+Click here: [Model Simulation](simulation/README.md)
 
 ---
 
