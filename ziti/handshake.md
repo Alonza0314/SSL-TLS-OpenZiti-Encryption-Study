@@ -120,4 +120,25 @@
 
         return keys[:SessionKeyBytes], keys[SecretKeyBytes:], nil
     }
+    func (pair *KeyPair) ServerSessionKeys(client_pk []byte) (rx []byte, tx []byte, err error) {
+        q, err := curve25519.X25519(pair.sk[:], client_pk)
+        if err != nil {
+            return nil, nil, err
+        }
+
+        h, err := blake2b.New(2*SessionKeyBytes, nil)
+        if err != nil {
+            return nil, nil, err
+        }
+
+        for _, b := range [][]byte{q, client_pk, pair.Public()} {
+            if _, err = h.Write(b); err != nil {
+                return nil, nil, err
+            }
+        }
+
+        keys := h.Sum(nil)
+
+        return keys[SessionKeyBytes:], keys[:SecretKeyBytes], nil
+    }
 ```

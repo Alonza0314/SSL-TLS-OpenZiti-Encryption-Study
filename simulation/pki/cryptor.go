@@ -41,8 +41,7 @@ func NewEncryptor(key, header []byte) (Encryptor, error) {
 	}
 
 	stream := &encryptor{}
-
-	k, err := chacha20.HChaCha20(key, header[:16])
+	k, err := chacha20.HChaCha20(key, header[:config.CRYPTO_CORE_HCHACHA20_INPUTSIZE])
 	if err != nil {
 		return nil, errors.New("failed to new encryptor:\n\t" + err.Error())
 	}
@@ -57,6 +56,10 @@ func NewEncryptor(key, header []byte) (Encryptor, error) {
 		stream.nonce[i+config.CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_COUNTERBYTES] = b
 	}
 
+	// copy(stream.nonce[config.CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_COUNTERBYTES:], header[config.CRYPTO_CORE_HCHACHA20_INPUTSIZE:])
+
+	// copy(stream.pad[:], pad0[:])
+
 	return stream, nil
 }
 
@@ -67,7 +70,6 @@ func NewDecryptor(key, header []byte) (Decryptor, error) {
 		return nil, errors.New("failed to new decryptor:\n\t" + err.Error())
 	}
 	copy(stream.k[:], k)
-
 	stream.reset()
 
 	copy(stream.nonce[config.CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_COUNTERBYTES:], header[config.CRYPTO_CORE_HCHACHA20_INPUTSIZE:])
@@ -134,7 +136,7 @@ func (d *decryptor) Pull(in []byte) ([]byte, byte, error) {
 	inlen := len(in)
 
 	if inlen < config.STREAM_A_SIZE {
-		return nil, 0, errors.New("failed to pull:\n\t input length expected to be" + fmt.Sprintf("%v", config.STREAM_A_SIZE) + " but " + fmt.Sprintf("%v", len(in)))
+		return nil, 0, errors.New("failed to pull:\n\t input length expected to be " + fmt.Sprintf("%v", config.STREAM_A_SIZE) + " but " + fmt.Sprintf("%v", len(in)))
 	}
 
 	mlen := inlen - config.STREAM_A_SIZE

@@ -13,10 +13,10 @@ import (
 type request struct {
 	Hello     string            `json:"hello"`
 	PublicKey ed25519.PublicKey `json:"public_key"`
-	Options   map[string]string `json:"options"`
+	Options   map[string][]byte `json:"options"`
 }
 
-func NewRequest(hello string, publicKey ed25519.PublicKey, options map[string]string) (*request, error) {
+func NewRequest(hello string, publicKey ed25519.PublicKey, options map[string][]byte) (*request, error) {
 	if hello != config.CLIENT_HELLO {
 		return nil, errors.New("failed to new request:\n\thello message expected to be CLIENT_HELLO")
 	}
@@ -43,9 +43,9 @@ func (r *request) SendForReply(conn net.Conn) (*reply, error) {
 		return nil, errors.New("failed to write to conn:\n\t" + err.Error())
 	}
 	log.Println(config.SENT, config.CLIENT_HELLO)
-    if err = conn.SetWriteDeadline(time.Time{}); err != nil {
-        return nil, errors.New("failed to reset write timeout:\n\t" + err.Error())
-    }
+	if err = conn.SetWriteDeadline(time.Time{}); err != nil {
+		return nil, errors.New("failed to reset write timeout:\n\t" + err.Error())
+	}
 
 	if err = conn.SetReadDeadline(time.Now().Add(config.CONN_TIMEOUT)); err != nil {
 		return nil, errors.New("failed to set conn read timeout:\n\t" + err.Error())
@@ -55,9 +55,9 @@ func (r *request) SendForReply(conn net.Conn) (*reply, error) {
 		return nil, errors.New("failed to decode from conn:\n\t" + err.Error())
 	}
 	log.Println(config.RECEIVED, config.SERVER_HELLO)
-    if err = conn.SetReadDeadline(time.Time{}); err != nil {
-        return nil, errors.New("failed to reset read timeout:\n\t" + err.Error())
-    }
+	if err = conn.SetReadDeadline(time.Time{}); err != nil {
+		return nil, errors.New("failed to reset read timeout:\n\t" + err.Error())
+	}
 
 	return &rep, nil
 }
@@ -65,10 +65,10 @@ func (r *request) SendForReply(conn net.Conn) (*reply, error) {
 type reply struct {
 	Hello     string            `json:"hello"`
 	PublicKey ed25519.PublicKey `json:"public_key"`
-	Options   map[string]string `json:"options"`
+	Options   map[string][]byte `json:"options"`
 }
 
-func NewReply(hello string, publicKey ed25519.PublicKey, options map[string]string) (*reply, error) {
+func NewReply(hello string, publicKey ed25519.PublicKey, options map[string][]byte) (*reply, error) {
 	if hello != config.SERVER_HELLO {
 		return nil, errors.New("failed to new request:\n\thello message expected to be SERVER_HELLO")
 	}
@@ -95,8 +95,8 @@ func (r *reply) SendReply(conn net.Conn) error {
 	}
 	log.Println(config.SENT, config.SERVER_HELLO)
 	if err = conn.SetWriteDeadline(time.Time{}); err != nil {
-        return errors.New("failed to reset write timeout:\n\t" + err.Error())
-    }
+		return errors.New("failed to reset write timeout:\n\t" + err.Error())
+	}
 
 	return nil
 }

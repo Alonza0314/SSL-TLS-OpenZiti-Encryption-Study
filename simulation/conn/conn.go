@@ -1,6 +1,7 @@
 package conn
 
 import (
+	"bufio"
 	"context"
 	"crypto/rand"
 	"encoding/json"
@@ -11,6 +12,7 @@ import (
 	"os/signal"
 	"simulation/config"
 	"simulation/pki"
+	"slices"
 	"sync"
 	"syscall"
 	"time"
@@ -20,7 +22,7 @@ import (
 
 type ListenerInterface func(string, HandlerInterface)
 
-type HandlerInterface func(conn net.Conn, ctx context.Context)
+type HandlerInterface func(conn net.Conn)
 
 func TCPListener(serverCfg string, handler HandlerInterface) {
 	log.Println("=> Server Starting...")
@@ -72,13 +74,13 @@ func TCPListener(serverCfg string, handler HandlerInterface) {
 			go func(conn net.Conn) {
 				defer wg.Done()
 				defer conn.Close()
-				handler(conn, ctx)
+				handler(conn)
 			}(conn)
 		}
 	}
 }
 
-func TCPHandler(conn net.Conn, ctx context.Context) {
+func TCPHandler(conn net.Conn) {
 	if err := conn.SetReadDeadline(time.Now().Add(config.CONN_TIMEOUT)); err != nil {
 		log.Printf("failed to set read timeoute:\n\t%s\n", err.Error())
 		return
@@ -122,48 +124,75 @@ func TCPHandler(conn net.Conn, ctx context.Context) {
 		log.Printf("failed to compute rx tx:\n\t%s\n", err.Error())
 		return
 	}
+	// fmt.Println("rx:", rx)
+	// fmt.Println("tx:", tx)
 
 	txHeader := make([]byte, config.STREAM_HEADER_SIZE)
 	if _, err := rand.Read(txHeader); err != nil {
 		log.Printf("failed to make txHeader:\n\t%s\n", err.Error())
 		return
 	}
-
 	sender, err := pki.NewEncryptor(tx, txHeader)
 	if err != nil {
 		log.Printf("failed to new encryptor:\n\t%s\n", err.Error())
 		return
 	}
-
-	receiver, err := pki.NewDecryptor(rx, []byte(req.Options[config.TX_HEADER]))
+	receiver, err := pki.NewDecryptor(rx, req.Options[config.TX_HEADER])
 	if err != nil {
 		log.Printf("failed to new decryptor:\n\t%s\n", err.Error())
 		return
 	}
-	options := map[string]string{
-		config.TX_HEADER: string(txHeader),
+	options := map[string][]byte{
+		config.TX_HEADER: txHeader,
 	}
 	rep, err := NewReply(config.SERVER_HELLO, keyPair.Public(), options)
 	if err != nil {
 		log.Printf("failed to new reply:\n\t%s\n", err.Error())
 		return
 	}
-
 	if err = rep.SendReply(conn); err != nil {
 		log.Printf("failed to send reply:\n\t%s\n", err.Error())
 		return
 	}
 
-	// TODO
-	// ctx graceful stop
-	for {
-		select {
-		case <-ctx.Done():
-		default:
-			// TODO
-			// Read and Write
-			// if Read EOF, break for and return
+	reader := bufio.NewReader(conn)
+
+	ciphertextReceive, err := reader.ReadString('\n')
+	if err != nil {
+		if err.Error() == "EOF" {
+			log.Printf("Unexpected error:\n\t%s\n", err.Error())
+			return
 		}
+		log.Printf("failed to read from conn:\n\t%s\n", err.Error())
+		return
 	}
-	fmt.Println(sender, receiver)
+	log.Println(config.RECEIVED, ciphertextReceive)
+	ciphertextReceive = ciphertextReceive[:len(ciphertextReceive)-1]
+
+	plaintext, _, err := receiver.Pull([]byte(ciphertextReceive))
+	if err != nil {
+		log.Printf("failed to decrypt ciphertext:\n\t%s\n", err.Error())
+		return
+	}
+	log.Println(config.PLAINTEXT, string(plaintext))
+
+	plaintextSend := []byte(plaintext)
+	slices.Reverse(plaintextSend)
+	log.Println(config.PLAINTEXT, string(plaintextSend))
+
+	ciphertextSend, err := sender.Push(plaintextSend, config.TAG_MESSAGE)
+	if err != nil {
+		log.Printf("failed to encrypt plaintext:\n\t%s\n", err.Error())
+		return
+	}
+	ciphertextSend = append(ciphertextSend, '\n')
+
+	log.Println(config.SENT, string(ciphertextSend))
+
+	if _, err = conn.Write(ciphertextSend); err != nil {
+		log.Printf("failed to write to conn:\n\t%s\n", err.Error())
+		return
+	}
+
+	log.Println(config.CLOSE, "from", conn.RemoteAddr())
 }

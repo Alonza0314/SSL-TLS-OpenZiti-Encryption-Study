@@ -18,6 +18,10 @@ func TestClient(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	if err = conn.Communicate(); err != nil {
+		t.Fatal(err)
+	}
+
 	if err = conn.Close(); err != nil {
 		t.Fatal(err)
 	}

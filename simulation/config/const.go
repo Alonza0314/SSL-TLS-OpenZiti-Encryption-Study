@@ -31,7 +31,10 @@ const (
 
 	CONN_TIMEOUT = 5 * time.Second
 
-	NEW      = "[NEW]"
-	RECEIVED = "[RECEIVED]"
-	SENT     = "[SENT]"
+	NEW        = "[NEW]"
+	RECEIVED   = "[RECEIVED]"
+	SENT       = "[SENT]"
+	CLOSE      = "[CLOSE]"
+	PLAINTEXT  = "[PLAINTEXT]"
+	CIPHERTEXT = "[CIPHERTEXT]"
 )

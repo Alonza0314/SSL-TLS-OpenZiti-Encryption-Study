@@ -145,7 +145,7 @@ func (pair *KeyPair) ClientSessionKeys(serverPk []byte) ([]byte, []byte, error) 
 
 	keys := h.Sum(nil)
 
-	return keys[:config.SESSION_KEY_SIZE], keys[config.SESSION_KEY_SIZE:], nil
+	return keys[:config.SESSION_KEY_SIZE], keys[config.SECERT_KEY_SIZE:], nil
 }
 
 func (pair *KeyPair) ServerSessionKeys(clientPk []byte) ([]byte, []byte, error) {
@@ -167,5 +167,5 @@ func (pair *KeyPair) ServerSessionKeys(clientPk []byte) ([]byte, []byte, error) 
 
 	keys := h.Sum(nil)
 
-	return keys[:config.SESSION_KEY_SIZE], keys[config.SESSION_KEY_SIZE:], nil
+	return keys[config.SESSION_KEY_SIZE:], keys[:config.SECERT_KEY_SIZE], nil
 }
