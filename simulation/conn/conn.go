@@ -101,17 +101,6 @@ func TCPHandler(conn net.Conn) {
 		log.Printf("failed to read config:\n\t%s\n", err.Error())
 		return
 	}
-	// keyPair, err := pki.NewKeyPair(viper.GetString("server.privateKey"), viper.GetString("server.publicKey"))
-	// if err != nil {
-	// 	log.Printf("failed to new keypair:\n\t%s\n", err.Error())
-	//	return
-	// }
-
-	// rx, tx, err := keyPair.SessionKeys(req.PublicKey)
-	// if err != nil {
-	// 	log.Printf("failed to compute rx tx:\n\t%s\n", err.Error())
-	// 	return
-	// }
 
 	keyPair, err := pki.NewKeyPair()
 	if err != nil {

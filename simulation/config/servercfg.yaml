@@ -2,5 +2,3 @@ server:
   addr: "127.0.0.1"
   port: 8080
   crypto: true
-  # privateKey: "../cert/serverPrivate.pem"
-  # publicKey: "../cert/serverPublic.pem"

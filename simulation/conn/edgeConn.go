@@ -46,12 +46,6 @@ func NewEdgeConn(clinetCfg string) (*edgeConn, error) {
 
 	ec.crypto = viper.IsSet("client.crypto")
 	if ec.crypto {
-		// keyPair, err := pki.NewKeyPair(viper.GetString("client.privateKey"), viper.GetString("client.publicKey"))
-		// if err != nil {
-		// 	return nil, errors.New("failed to new keyPair:\n\t" + err.Error())
-		// }
-		// ec.keyPair = keyPair
-
 		if ec.keyPair, err = pki.NewKeyPair(); err != nil {
 			return nil, errors.New("failed to new keyPair:\n\t" + err.Error())
 		}
@@ -97,19 +91,18 @@ func (c *edgeConn) Connect() error {
 
 func (c *edgeConn) Communicate() error {
 	plaintextSend := "simulation"
-	log.Println(config.PLAINTEXT, plaintextSend)
-
-	ciphertextSend, err := c.sender.Push([]byte(plaintextSend), config.TAG_MESSAGE)
-	if err != nil {
-		return errors.New("failed to encrypt plaintext:\n\t" + err.Error())
-	}
-	ciphertextSend = append(ciphertextSend, '\n')
-	if _, err = c.conn.Write(ciphertextSend); err != nil {
-		return errors.New("failed to write to conn:\n\t" + err.Error())
+	if err := c.write([]byte(plaintextSend)); err != nil {
+		return errors.New("failed to write:\n\t" + err.Error())
 	}
 
-	log.Println(config.SENT, string(ciphertextSend))
+	if err := c.read(); err != nil {
+		return errors.New("failed to read:\n\t" + err.Error())
+	}
 
+	return nil
+}
+
+func (c *edgeConn) read() error {
 	reader := bufio.NewReader(c.conn)
 
 	ciphertextReceive, err := reader.ReadString('\n')
@@ -127,16 +120,23 @@ func (c *edgeConn) Communicate() error {
 		return errors.New("failed to decrypt ciphertext:\n\t%s\n" + err.Error())
 	}
 	log.Println(config.PLAINTEXT, string(plaintextReceive))
-
 	return nil
 }
 
-func (c *edgeConn) read(msg *[]byte) (int, error) {
-	return 0, nil
-}
+func (c *edgeConn) write(plaintextSend []byte) error {
+	log.Println(config.PLAINTEXT, string(plaintextSend))
 
-func (c *edgeConn) write(msg []byte) (int, error) {
-	return 0, nil
+	ciphertextSend, err := c.sender.Push([]byte(plaintextSend), config.TAG_MESSAGE)
+	if err != nil {
+		return errors.New("failed to encrypt plaintext:\n\t" + err.Error())
+	}
+	ciphertextSend = append(ciphertextSend, '\n')
+	if _, err = c.conn.Write(ciphertextSend); err != nil {
+		return errors.New("failed to write to conn:\n\t" + err.Error())
+	}
+
+	log.Println(config.SENT, string(ciphertextSend))
+	return nil
 }
 
 func (c *edgeConn) Close() error {
