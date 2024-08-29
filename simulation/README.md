@@ -4,7 +4,7 @@
 
 |-|Version|
 |-|-|
-|Ubuntu|22.04|
+|Ubuntu|22.04.4 LTS|
 |Golang|go1.22.5 linux/amd64|
 
 ## Sequence Diagram
@@ -122,3 +122,9 @@ Run:
   + The client will encrypt the string "simulation" and send its ciphertext to the server.
   + The server will receive the ciphertext, decrypt it, reverse the plaintext, and then encrypt the reversed plaintext before sending it back to the client.
   + The client will receive the ciphertext, decrypt it, and obtain the correct plaintext "noitalumis".
+
+## Reference
+
+[Openziti: sdk-golang](https://github.com/openziti/sdk-golang)
+
+[Openziti: secretstream](https://github.com/openziti/secretstream)
