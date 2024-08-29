@@ -1,5 +1,12 @@
 # Ziti's Model Simulation
 
+## Env
+
+|-|Version|
+|-|-|
+|Ubuntu|22.04|
+|Golang|go1.22.5 linux/amd64|
+
 ## Sequence Diagram
 
 ```mermaid
