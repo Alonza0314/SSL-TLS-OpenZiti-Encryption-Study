@@ -17,13 +17,24 @@ sequenceDiagram
 
 ## Crypto Model - Base Curve25519
 
+### Prep: Exchange Public Key and txHeader
+
+```mermaid
+graph LR
+    Server[Server] -->|pkS, txHeaderS| Client[Client]
+    Client -->|pkC, txHeaderC| Server
+```
+
+### Crypto
+
 ```mermaid
 graph TB
-    subgraph Compute
+    subgraph Computation
         direction LR
 
-        subgraph Server
+        subgraph ServerComputation
             direction TB
+            
             SA[SessionKey - skS] -->|+pkC| SC[SharePoint - q]
             SB[PublicKey - pkS] --> SD["Key = hash(q + pkC + pkS)"]
             SC --> SD
@@ -31,26 +42,40 @@ graph TB
             SD -->|"Key[0:32]"| SF[txS]
         end
 
-        subgraph Client
+        subgraph ClientComputation
             direction TB
+            
             CA[SessionKey - skC] -->|+pkC| CC[SharePoint - q]
             CB[PublicKey - pkC] --> CD["Key = hash(q + pkC + pkS)"]
             CC --> CD
             CD -->|"Key[0:32]"| CE[rxC]
             CD -->|"Key[32:64]"| CF[txC]
         end
-
-        Server -->|pkS, txHeaderS| Client
-        Client -->|pkC, txHeaderC| Server
     end
 
     subgraph Communication
         direction LR
-        A
+
+        subgraph ServerCommunication
+            direction TB
+            A[DecryptorS]
+            B[EncryptorS]
+        end
+
+        subgraph ClientCommunication
+            direction TB
+            C[DecryptorC]
+            D[EncryptorC]
+        end
+
+        B --> C
+        D --> A
     end
 
-    SE --> |"(rxS)"| Communication
-    SF --> |"(txS)"| Communication
-    CE --> |"(rxC)"| Communication
-    CF --> |"(txC)"| Communication
+
+
+    SE -->|+txHeaderC| A
+    SF -->|+txHeaderS| B
+    CE -->|+txHeaderS| C
+    CF -->|+txHeaderC| D
 ```
