@@ -46,13 +46,11 @@ graph TB
 
     subgraph Communication
         direction LR
-        
-        SG --- CH
-        CG --- SH
+        A
     end
 
-    Server --> |"(rxS)"| Communication
-    Server --> |"(txS)"| Communication
-    Client --> |"(rxC)"| Communication
-    Client --> |"(txC)"| Communication
+    SE --> |"(rxS)"| Communication
+    SF --> |"(txS)"| Communication
+    CE --> |"(rxC)"| Communication
+    CF --> |"(txC)"| Communication
 ```
