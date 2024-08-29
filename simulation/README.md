@@ -45,7 +45,7 @@ graph TB
         subgraph ClientComputation
             direction TB
             
-            CA[SessionKey - skC] -->|+pkC| CC[SharePoint - q]
+            CA[SessionKey - skC] -->|+pkS| CC[SharePoint - q]
             CB[PublicKey - pkC] --> CD["Key = hash(q + pkC + pkS)"]
             CC --> CD
             CD -->|"Key[0:32]"| CE[rxC]
