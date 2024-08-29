@@ -27,9 +27,8 @@ graph TB
             SA[SessionKey - skS] -->|+pkC| SC[SharePoint - q]
             SB[PublicKey - pkS] --> SD["Key = hash(q + pkC + pkS)"]
             SC --> SD
-            SD -->|"Key[32:64]"| SE[rx]
-            SD -->|"Key[0:32]"| SF[tx]
-            SF --> SH[Encryptor]
+            SD -->|"Key[32:64]"| SE[rxS]
+            SD -->|"Key[0:32]"| SF[txS]
         end
 
         subgraph Client
@@ -37,9 +36,8 @@ graph TB
             CA[SessionKey - skC] -->|+pkC| CC[SharePoint - q]
             CB[PublicKey - pkC] --> CD["Key = hash(q + pkC + pkS)"]
             CC --> CD
-            CD -->|"Key[0:32]"| CE[rx]
-            CD -->|"Key[32:64]"| CF[tx]
-            CF --> CH[Encryptor]
+            CD -->|"Key[0:32]"| CE[rxC]
+            CD -->|"Key[32:64]"| CF[txC]
         end
 
         Server -->|pkS, txHeaderS| Client
@@ -47,8 +45,14 @@ graph TB
     end
 
     subgraph Communication
-        direction TB
-        Server --> |"(rx)"| SG[Decryptor]
-        Client --> |"(rx)"| CG[Decryptor]
+        direction LR
+        
+        SG --- CH
+        CG --- SH
     end
+
+    Server --> |"(rxS)"| Communication
+    Server --> |"(txS)"| Communication
+    Client --> |"(rxC)"| Communication
+    Client --> |"(txC)"| Communication
 ```
