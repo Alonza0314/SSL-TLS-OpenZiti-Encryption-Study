@@ -48,17 +48,9 @@ func NewEncryptor(key, header []byte) (Encryptor, error) {
 	copy(stream.k[:], k)
 	stream.reset()
 
-	for i := range stream.pad {
-		stream.pad[i] = 0
-	}
+	copy(stream.nonce[config.CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_COUNTERBYTES:], header[config.CRYPTO_CORE_HCHACHA20_INPUTSIZE:])
 
-	for i, b := range header[config.CRYPTO_CORE_HCHACHA20_INPUTSIZE:] {
-		stream.nonce[i+config.CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_COUNTERBYTES] = b
-	}
-
-	// copy(stream.nonce[config.CRYPTO_SECRETSTREAM_XCHACHA20POLY1305_COUNTERBYTES:], header[config.CRYPTO_CORE_HCHACHA20_INPUTSIZE:])
-
-	// copy(stream.pad[:], pad0[:])
+	copy(stream.pad[:], pad0[:])
 
 	return stream, nil
 }
