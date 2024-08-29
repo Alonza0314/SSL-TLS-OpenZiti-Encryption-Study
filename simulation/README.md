@@ -81,7 +81,37 @@ graph TB
 ```
 
 + Keypoint:
-  1. The two SharePoints, q, in both ServerComputation and ClientComputation are the same.
-  2. Since q is the same, it fllows that the Keys in both side, which are derived from hash q + pkC + pkS, are also the same.
-  3. And also, txS(Key[0:32]) is same as rxC(Key[0:32]). They will plus txHeaderS to make cryptor. So, DecryptorC can decrypt the cipher from EncryptorS.
-  4. By the same reasoning, DecryptorS can decrypt the cipher from EncryptorC.
+  + The two SharePoints, q, in both ServerComputation and ClientComputation are the same.
+  + Since q is the same, it fllows that the Keys in both side, which are derived from hash q + pkC + pkS, are also the same.
+  + And also, txS(Key[0:32]) is same as rxC(Key[0:32]). They will plus txHeaderS to make cryptor. So, DecryptorC can decrypt the cipher from EncryptorS.
+  + By the same reasoning, DecryptorS can decrypt the cipher from EncryptorC.
+
+## Demo
+
+### Server
+
+Path: ssl-tls-Research/simulation/server
+Run:
+
+```bash
+    go test
+```
+
+### Client
+
+Path: ssl-tls-Research/simulation/client
+Run:
+
+```bash
+    go test
+```
+
+### ScreenShots
+
+![server](../static/simulationImg/server.png)
+![client](../static/simulationImg/client.png)
+
++ Description:
+  + The client will encrypt the string "simulation" and send its ciphertext to the server.
+  + The server will receive the ciphertext, decrypt it, reverse the plaintext, and then encrypt the reversed plaintext before sending it back to the client.
+  + The client will receive the ciphertext, decrypt it, and obtain the correct plaintext "noitalumis".
