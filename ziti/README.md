@@ -4,8 +4,6 @@ The model seems like TLS 1.3 with using [X25519](https://blog.sww.moe/post/x2551
 
 This model is only from client aspect.
 
----
-
 ## Flow Chart
 
 ```mermaid
