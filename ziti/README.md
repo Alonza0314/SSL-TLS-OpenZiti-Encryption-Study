@@ -21,11 +21,12 @@ This model is only from the client aspect and also just an outline; the more pre
         K((tx))
         L[NewDeCryptor]
         M[NewEncryptor]
-        N((txHeader))
+        N((txHeader: from server))
         O((sender, i.e., encryptor))
         P([Push: used to encrypt data])
         Q((receiver, i.e, decryptor))
         R([Pull: used to decrypt data])
+        S((txHeader: send to server))
 
         A --> B
         B -- No --> C
@@ -38,10 +39,10 @@ This model is only from the client aspect and also just an outline; the more pre
         I --> J
         I --> K
         J --> L
-        M --> N
         K --> M
         N --> L
         M --> O
+        M --> S
         O --> P
         L --> Q
         Q --> R
