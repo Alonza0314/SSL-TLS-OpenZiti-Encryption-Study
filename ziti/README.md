@@ -82,7 +82,7 @@ This model is only from the client aspect and also just an outline; the more pre
 
 1. Pull data from the conn.receiver(a decryptor) and get the plaintext.
 
-## [keypair](keypair.md)
+## [KeyPair](keypair.md)
 
 The main idea is computing rx and tx session keys under curve25519.
 
