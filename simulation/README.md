@@ -98,6 +98,7 @@ graph TB
 ### Server
 
 Path: SSL-TLS-OpenZiti-Encryption-Study/simulation/server
+
 Run:
 
 ```bash
@@ -107,6 +108,7 @@ Run:
 ### Client
 
 Path: SSL-TLS-OpenZiti-Encryption-Study/simulation/client
+
 Run:
 
 ```bash
