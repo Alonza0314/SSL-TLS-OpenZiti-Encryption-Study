@@ -2,7 +2,7 @@
 
 The model seems like TLS 1.3 with using [X25519](https://blog.sww.moe/post/x25519/), but without certificate, i.e., only focus on key exchange and cryption without authentication.
 
-This model is only from client aspect and also just an outline, the more precise crypto-model should be go to [simulation/README.md](../simulation/README.md) for review.
+This model is only from the client aspect and also just an outline; the more precise crypto-model should be moved to [simulation/README.md](../simulation/README.md) for review.
 
 ## Flow Chart
 
